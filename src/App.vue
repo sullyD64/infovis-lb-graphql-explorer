@@ -5,53 +5,57 @@
       color="primary"
       dark
     >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer />
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      <v-toolbar-title>LB-GraphQL-Explorer</v-toolbar-title>
     </v-app-bar>
-
     <v-main>
-      <HelloWorld />
+      <GraphExplorer />
     </v-main>
+    <v-footer
+      color="primary lighten-1"
+      padless
+    >
+      <v-row
+        no-gutters
+        align="center"
+        justify="center"
+      >
+        <v-col
+          cols="12"
+          class="primary lighten-2 py-4 text-center white--text"
+        >
+          <strong>Made by sullyD64</strong>
+          — {{ new Date().getFullYear() }}
+          <v-icon>mdi-heart</v-icon>
+        </v-col>
+      </v-row>
+    </v-footer>
   </v-app>
 </template>
+>
 
 <script lang="ts">
-import { defineComponent } from "@vue/composition-api";
-import HelloWorld from "@/components/HelloWorld.vue";
+import { defineComponent, provide } from "@vue/composition-api";
+import GraphExplorer from "@/components/GraphExplorer.vue";
+import { AuthServiceKey, useAuthService } from "./store/auth";
+import { LbGraphqlServiceKey, useLbGraphqlService } from "./store/graphql";
 
 export default defineComponent({
   name: "App",
 
   components: {
-    HelloWorld
+    GraphExplorer
+  },
+
+  setup () {
+    const oneMonth = 1000 * 60 * 60 * 24 * 30;
+    const authService = useAuthService("lb-token-demo", oneMonth);
+    const gqlClient = useLbGraphqlService("https://hs41.fhoster.com/angelo.brandimarte/Demo/auth/api/graphql/Administration", authService);
+
+    authService.login({ username: "a1", password: "a1" }, true);
+
+    provide(AuthServiceKey, authService);
+    provide(LbGraphqlServiceKey, gqlClient);
   }
+
 });
 </script>
