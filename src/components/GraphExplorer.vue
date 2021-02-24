@@ -68,7 +68,7 @@
         <svg
           id="viz"
           width="100%"
-          height="75vh"
+          height="80vh"
         />
         <!-- :viewBox="`0 0 ${chart.windowWidth} ${chart.windowHeight}`" -->
         <!-- preserveAspectRatio="xMidYMid meet" -->
@@ -78,7 +78,7 @@
         lg="2"
       >
         <v-card
-          class="object-details show"
+          class="object-details"
         >
           <v-card-title>
             <span class="object-details__title" />
@@ -108,7 +108,7 @@ import {
   LbGraphqlService,
   useLbGraphqlService
 } from "@/store/graphql";
-import { safeInject } from "@/store/utils";
+import { safeInject, safeProcessEnv } from "@/store/utils";
 import { AuthServiceKey } from "@/store/auth";
 import { computed, ComputedRef, defineComponent, onMounted } from "@vue/composition-api";
 import * as d3 from "d3";
@@ -122,8 +122,7 @@ import {
 export default defineComponent({
   name: "GraphExplorer",
   setup () {
-    const GQL_URL =
-      "https://hs41.fhoster.com/angelo.brandimarte/Demo/auth/api/graphql/Administration";
+    const GQL_URL = safeProcessEnv("VUE_APP_GQL_URL");
     const authService = safeInject(AuthServiceKey);
     const gqlService: LbGraphqlService = useLbGraphqlService(
       GQL_URL,
@@ -158,10 +157,9 @@ export default defineComponent({
           links = [];
           graph = new ExplorerNetwork(svg.value, nodes, links, queryManager);
 
-          graph.addClassNode("Employee");
+          // graph.addClassNode("Employee");
           // graph.addClassNode("Team");
-
-          graph.handleNewQuery("getPage", graph.getNode("Employee"));
+          // graph.handleNewQuery("getPage", graph.getNode("Employee"));
         });
     });
 

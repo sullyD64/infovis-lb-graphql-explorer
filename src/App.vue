@@ -38,6 +38,7 @@ import { defineComponent, provide } from "@vue/composition-api";
 import GraphExplorer from "@/components/GraphExplorer.vue";
 import { AuthServiceKey, useAuthService } from "./store/auth";
 import { LbGraphqlServiceKey, useLbGraphqlService } from "./store/graphql";
+import { safeProcessEnv } from "./store/utils";
 
 export default defineComponent({
   name: "App",
@@ -49,9 +50,9 @@ export default defineComponent({
   setup () {
     const oneMonth = 1000 * 60 * 60 * 24 * 30;
     const authService = useAuthService("lb-token-demo", oneMonth);
-    const gqlClient = useLbGraphqlService("https://hs41.fhoster.com/angelo.brandimarte/Demo/auth/api/graphql/Administration", authService);
+    const gqlClient = useLbGraphqlService(safeProcessEnv("VUE_APP_GQL_URL"), authService);
 
-    authService.login({ username: "a1", password: "a1" }, true);
+    authService.login({ username: safeProcessEnv("VUE_APP_USERNAME"), password: safeProcessEnv("VUE_APP_PASSWORD") }, true);
 
     provide(AuthServiceKey, authService);
     provide(LbGraphqlServiceKey, gqlClient);

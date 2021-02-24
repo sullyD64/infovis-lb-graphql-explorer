@@ -7,3 +7,11 @@ export function safeInject<T> (key: InjectionKey<T>): T {
   }
   return store;
 };
+
+export function safeProcessEnv (key: string): string {
+  if (!process.env[key]) {
+    throw new Error("missing required env var: " + key);
+  }
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  return process.env[key]!;
+}

@@ -2,6 +2,7 @@ module.exports = {
   configureWebpack: {
     devServer: {
       open: true
+      // disableHostCheck: true
     },
     devtool: "source-map",
     resolve: {
